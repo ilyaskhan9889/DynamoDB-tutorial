@@ -1,0 +1,8 @@
+aws dynamodb put-item \
+  --table-name Messages \
+  --item '{
+    "conversationId": {"S": "c1"},
+    "createdAt": {"N": "17074001"},
+    "text": {"S": "Hello"}
+  }' \
+  --endpoint-url http://localhost:8000

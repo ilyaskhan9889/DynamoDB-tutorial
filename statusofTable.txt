@@ -1,0 +1,10 @@
+aws dynamodb describe-table \
+  --table-name Messages \
+  --endpoint-url http://localhost:8000
+
+
+
+
+if table is deleted ::
+An error occurred (ResourceNotFoundException) when calling the DescribeTable operation: 
+Cannot do operations on a non-existent table

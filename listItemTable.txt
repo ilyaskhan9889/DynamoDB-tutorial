@@ -1,0 +1,5 @@
+aws dynamodb scan \
+  --table-name Messages \
+  --endpoint-url http://localhost:8000
+
+this is very slow do not use it.

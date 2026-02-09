@@ -1,0 +1,24 @@
+aws dynamodb batch-write-item \
+  --request-items '{
+    "Messages": [
+      {
+        "PutRequest": {
+          "Item": {
+            "conversationId": {"S": "c3"},
+            "timestamp": {"N": "17076001"},
+            "text": {"S": "Batch message 1"}
+          }
+        }
+      },
+      {
+        "PutRequest": {
+          "Item": {
+            "conversationId": {"S": "c3"},
+            "timestamp": {"N": "17076002"},
+            "text": {"S": "Batch message 2"}
+          }
+        }
+      }
+    ]
+  }' \
+  --endpoint-url http://localhost:8000

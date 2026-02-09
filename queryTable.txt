@@ -1,0 +1,31 @@
+filter only partion key
+
+aws dynamodb query \
+  --table-name Messages \
+  --key-condition-expression "conversationId = :c" \
+  --expression-attribute-values '{":c":{"S":"c1"}}' \
+  --endpoint-url http://localhost:8000
+
+filter partion key and sort key
+
+
+aws dynamodb query \
+  --table-name Messages \
+  --key-condition-expression "conversationId = :c AND timestamp > :t" \
+  --expression-attribute-values '{":c":{"S":"c1"}, ":t":{"N":"17074001"}}' \
+  --endpoint-url http://localhost:8000
+
+
+
+
+
+
+
+filter partion key and other attributes
+
+aws dynamodb query \
+  --table-name Messages \
+  --key-condition-expression "conversationId = :c" \
+  --filter-expression "read = :r" \
+  --expression-attribute-values '{":c":{"S":"c1"}, ":r":{"BOOL":false}}' \
+  --endpoint-url http://localhost:8000
