@@ -1,0 +1,11 @@
+ProjectionExpression
+
+Definition:
+Used in Query or Scan to return only specific attributes, instead of the whole item.
+Saves bandwidth and improves performance.
+
+aws dynamodb scan \
+  --table-name Messages \
+  --projection-expression "#t, #r" \
+  --expression-attribute-names '{"#t":"text","#r":"read"}' \
+  --endpoint-url http://localhost:8000

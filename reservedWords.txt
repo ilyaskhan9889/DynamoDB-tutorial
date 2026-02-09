@@ -1,0 +1,19 @@
+DynamoDB has keywords that you cannot use directly in expressions (like FilterExpression, 
+KeyConditionExpression, UpdateExpression) because they have a special meaning in the database.
+
+ABORT, ADD, ALL, ALTER, AND, ANY, AS, ASC, AUTHORIZATION, BETWEEN, BINARY, 
+BOOLEAN, BY, CASE, CAST, CHECK, COLUMN, CONDITION, CREATE, CROSS, DATA, DEFAULT, 
+DELETE, DESC, DISTINCT, ELEMENT, EXISTS, FALSE, FILTER, FOR, FROM, GLOBAL, GROUP, 
+HAVING, IF, IN, INDEX, INNER, INSERT, INTO, IS, KEY, LATERAL, LIKE, LIMIT, LOCAL, NOT, NULL,
+NUMBER, OF, ON, OR, ORDER, PRIMARY, READ, REDUCE, RETURN, SELECT, SET, SIZE, STRING, TABLE, 
+TEXT, THEN, TRUE, TYPE, UPDATE, USING, VALUES, VIEW, WHERE, WITH**
+
+Common ones that appear in apps: text, read, name, date, value, type
+
+
+
+Always map reserved attribute names to a placeholder in:
+FilterExpression
+KeyConditionExpression
+UpdateExpression
+ProjectionExpression
