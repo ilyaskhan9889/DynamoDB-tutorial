@@ -1,0 +1,21 @@
+Pagination using LastEvaluatedKey (ExclusiveStartKey):
+DynamoDB returns a maximum of 1 MB of data per request (or less if you use Limit).
+If there are more items, it includes LastEvaluatedKey in the response.
+You pass LastEvaluatedKey as ExclusiveStartKey in the next query/scan to fetch the next page.
+
+# First page
+aws dynamodb query \
+  --table-name Messages \
+  --key-condition-expression "conversationId = :c" \
+  --expression-attribute-values '{":c":{"S":"c1"}}' \
+  --limit 30 \
+  --endpoint-url http://localhost:8000
+
+# Next page (if LastEvaluatedKey exists)
+aws dynamodb query \
+  --table-name Messages \
+  --key-condition-expression "conversationId = :c" \
+  --expression-attribute-values '{":c":{"S":"c1"}}' \
+  --limit 30 \
+  --exclusive-start-key '{"conversationId":{"S":"c1"},"createdAt":{"N":"30"}}' \
+  --endpoint-url http://localhost:8000
