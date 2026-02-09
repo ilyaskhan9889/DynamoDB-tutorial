@@ -1,28 +1,41 @@
 filter only partion key
-
 aws dynamodb query \
   --table-name Messages \
   --key-condition-expression "conversationId = :c" \
   --expression-attribute-values '{":c":{"S":"c1"}}' \
   --endpoint-url http://localhost:8000
 
+
+
 filter partion key and sort key
-
-
 aws dynamodb query \
   --table-name Messages \
-  --key-condition-expression "conversationId = :c AND timestamp > :t" \
+  --key-condition-expression "conversationId = :c AND createdAt > :t" \
   --expression-attribute-values '{":c":{"S":"c1"}, ":t":{"N":"17074001"}}' \
   --endpoint-url http://localhost:8000
 
 
 
+filter using logical operators
+aws dynamodb query \
+  --table-name Messages \
+  --key-condition-expression "conversationId = :c AND createdAt > :t" \
+  --expression-attribute-values '{":c":{"S":"c1"}, ":t":{"N":"17074001"}}' \
+  --endpoint-url http://localhost:8000
 
+
+
+filter attributes values
+aws dynamodb query \
+  --table-name Messages \
+  --key-condition-expression "conversationId = :c" \
+  --filter-expression "contains(text, :word) AND read = :r" \
+  --expression-attribute-values '{":c":{"S":"c1"}, ":word":{"S":"Hello"}, ":r":{"BOOL":true}}' \
+  --endpoint-url http://localhost:8000
 
 
 
 filter partion key and other attributes
-
 aws dynamodb query \
   --table-name Messages \
   --key-condition-expression "conversationId = :c" \

@@ -1,0 +1,37 @@
+Functions: attribute_exists(attr), attribute_not_exists(attr), 
+begins_with(attr, "prefix"), contains(attr, "value") give examples
+
+1️⃣ attribute_exists(attr)
+Returns items where the attribute exists.
+Useful for checking optional fields.
+aws dynamodb scan \
+  --table-name Messages \
+  --filter-expression "attribute_exists(#r)" \
+  --expression-attribute-names '{"#r":"read"}' \
+  --endpoint-url http://localhost:8000
+
+2️⃣ attribute_not_exists(attr)
+Returns items where the attribute is missing.
+aws dynamodb scan \
+  --table-name Messages \
+  --filter-expression "attribute_not_exists(#r)" \
+  --expression-attribute-names '{"#r":"read"}' \
+  --endpoint-url http://localhost:8000
+
+3️⃣ begins_with(attr, "prefix")
+Returns items where the string attribute starts with a given prefix.
+aws dynamodb scan \
+  --table-name Messages \
+  --filter-expression "begins_with(#t, :prefix)" \
+  --expression-attribute-names '{"#t":"text"}' \
+  --expression-attribute-values '{":prefix":{"S":"Hello"}}' \
+  --endpoint-url http://localhost:8000
+
+4️⃣ contains(attr, "value")
+Returns items where the string or set attribute contains a substring or element.
+aws dynamodb scan \
+  --table-name Messages \
+  --filter-expression "contains(#t, :word)" \
+  --expression-attribute-names '{"#t":"text"}' \
+  --expression-attribute-values '{":word":{"S":"How"}}' \
+  --endpoint-url http://localhost:8000
