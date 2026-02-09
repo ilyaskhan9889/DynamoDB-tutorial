@@ -19,3 +19,18 @@ aws dynamodb query \
   --limit 30 \
   --exclusive-start-key '{"conversationId":{"S":"c1"},"createdAt":{"N":"30"}}' \
   --endpoint-url http://localhost:8000
+
+
+Using ScanIndexForward (Sort Key Ordering)
+Not exactly a separate pagination method, but affects how you paginate messages.
+ScanIndexForward = true → ascending order by Sort Key
+ScanIndexForward = false → descending order by Sort Key (latest items first)
+Example: Fetch latest messages first:
+
+aws dynamodb query \
+  --table-name Messages \
+  --key-condition-expression "conversationId = :c" \
+  --expression-attribute-values '{":c":{"S":"c1"}}' \
+  --limit 20 \
+  --scan-index-forward false \
+  --endpoint-url http://localhost:8000
