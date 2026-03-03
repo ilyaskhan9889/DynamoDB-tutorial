@@ -1,0 +1,93 @@
+Updating Table Settings
+
+You do not edit items here, only the table configuration.
+Common things you can update:
+
+Provisioned throughput (read/write capacity)
+Add or remove Global Secondary Indexes (GSI)
+Enable/disable streams
+
+Example: Increase provisioned throughput
+
+aws dynamodb update-table \
+  --table-name Messages \
+  --provisioned-throughput ReadCapacityUnits=10,WriteCapacityUnits=10 \
+  --endpoint-url http://localhost:8000
+
+Only relevant if your table is PROVISIONED. If it’s PAY_PER_REQUEST, throughput is managed automatically.
+
+Example: Add a Global Secondary Index
+aws dynamodb update-table \
+  --table-name Messages \
+  --attribute-definitions AttributeName=read,AttributeType=S \
+  --global-secondary-index-updates '[
+      {
+        "Create": {
+          "IndexName": "ReadIndex",
+          "KeySchema":[{"AttributeName":"read","KeyType":"HASH"}],
+          "Projection":{"ProjectionType":"ALL"},
+          "ProvisionedThroughput":{"ReadCapacityUnits":5,"WriteCapacityUnits":5}
+        }
+      }
+  ]' \
+  --endpoint-url http://localhost:8000
+
+
+
+Updating Items in the Table
+
+If you want to change the data (like marking a message as read, editing text), 
+you use UpdateItem with UpdateExpression.
+
+Example: Mark a message as read
+aws dynamodb update-item \
+  --table-name Messages \
+  --key '{"conversationId": {"S": "c1"}, "createdAt": {"N": "2"}}' \
+  --update-expression "SET #r = :val" \
+  --expression-attribute-names '{"#r":"read"}' \
+  --expression-attribute-values '{":val":{"BOOL":true}}' \
+  --endpoint-url http://localhost:8000
+
+#r → placeholder for read (reserved word)
+:val → value to set
+
+Example: Update text and mark edited
+aws dynamodb update-item \
+  --table-name Messages \
+  --key '{"conversationId": {"S": "c1"}, "createdAt": {"N": "2"}}' \
+  --update-expression "SET #t = :newText, #e = :edited" \
+  --expression-attribute-names '{"#t":"text","#e":"edited"}' \
+  --expression-attribute-values '{":newText":{"S":"Hi there"} , ":edited":{"BOOL":true}}' \
+  --endpoint-url http://localhost:8000
+
+
+deleting item:
+aws dynamodb delete-item \
+  --table-name Messages \
+  --key '{"conversationId": {"S": "c1"}, "createdAt": {"N": "2"}}' \
+  --endpoint-url http://localhost:8000
+
+get item:
+aws dynamodb get-item \
+  --table-name Messages \
+  --key '{"conversationId": {"S": "c1"}, "createdAt": {"N": "2"}}' \
+  --endpoint-url http://localhost:8000
+
+update item:
+aws dynamodb update-item \
+  --table-name Messages \
+  --key '{"conversationId": {"S": "c1"}, "createdAt": {"N": "2"}}' \
+  --update-expression "SET #t = :newText" \
+  --expression-attribute-names '{"#t":"text"}' \
+  --expression-attribute-values '{":newText":{"S":"Hi"}}' \
+  --endpoint-url http://localhost:8000
+
+condional update:
+aws dynamodb update-item \
+  --table-name Messages \
+  --key '{"conversationId": {"S": "c1"}, "createdAt": {"N": "2"}}' \
+  --update-expression "SET #r = :read" \
+  --condition-expression "#r = :oldRead" \
+  --expression-attribute-names '{"#r":"read"}' \
+  --expression-attribute-values '{":read":{"BOOL":true}, ":oldRead":{"BOOL":false}}' \
+  --endpoint-url http://localhost:8000
